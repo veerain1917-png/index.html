@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For Chhotu 🤍🫂</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #fff5f8; }
+        nav { background: #ff6b81; padding: 15px; text-align: center; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; font-size: 18px; }
+        .page { padding: 30px; display: none; }
+        h1 { color: #ff6b81; }
+        .question { margin-bottom: 20px; }
+        button { padding: 10px 20px; background: #ff6b81; color: white; border: none; cursor: pointer; border-radius: 5px; }
+        button:hover { background: #ff5069; }
+        #memory-game { display: grid; grid-template-columns: repeat(4, 100px); gap: 10px; justify-content: center; }
+        .tile {
+            width: 100px; height: 100px; background: white; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 40px; cursor: pointer; border: 2px solid #ff6b81;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" onclick="showPage('page1')">Love Letter</a>
+        <a href="#" onclick="showPage('page2')">Quiz</a>
+        <a href="#" onclick="showPage('page3')">Memory Game</a>
+    </nav>
+
+    <!-- Page 1: Love Letter -->
+    <div id="page1" class="page" style="display:block;">
+        <h1>For My Chhotuuu 😇❤️🫂</h1>
+        <p>Hey love,<br><br>
+        I just wanted to remind you how much you mean to me. Even the smallest moments with you make my whole day brighter.
+        Thank you for being kind, funny, and truly amazing in every way. I’m really lucky to have you, and I appreciate you
+        more than I can ever put into words.<br><br>
+        You make my world better just by being in it ❤️✨🫂</p>
+    </div>
+
+    <!-- Page 2: Quiz -->
+    <div id="page2" class="page">
+        <h1>Quiz Time ❤️</h1>
+
+        <div class="question">
+            <p>1) In which year did we meet?</p>
+            <label><input type="radio" name="q1" value="A"> 2017</label><br>
+            <label><input type="radio" name="q1" value="B"> 2018</label><br>
+            <label><input type="radio" name="q1" value="C"> 2019</label><br>
+            <label><input type="radio" name="q1" value="D"> 2020</label>
+        </div>
+
+        <div class="question">
+            <p>2) Who loves each other more?</p>
+            <label><input type="radio" name="q2" value="You"> You</label><br>
+            <label><input type="radio" name="q2" value="Me"> Me</label>
+        </div>
+
+        <div class="question">
+            <p>3) Which was the first chocolate I gave you?</p>
+            <label><input type="radio" name="q3" value="A"> Dairy Milk</label><br>
+            <label><input type="radio" name="q3" value="B"> Kitkat</label><br>
+            <label><input type="radio" name="q3" value="C"> Fivestar</label><br>
+            <label><input type="radio" name="q3" value="D"> None of the above</label>
+        </div>
+
+        <div class="question">
+            <p>4) Which thing do I like the most about you?</p>
+            <label><input type="radio" name="q4" value="A"> You</label><br>
+            <label><input type="radio" name="q4" value="B"> Everything about you</label><br>
+            <label><input type="radio" name="q4" value="C"> Your eyes</label><br>
+            <label><input type="radio" name="q4" value="D"> You and everything about you</label>
+        </div>
+
+        <div class="question">
+            <p>5) Since how many years I'm loving you?</p>
+            <label><input type="radio" name="q5" value="A"> 5</label><br>
+            <label><input type="radio" name="q5" value="B"> 6</label><br>
+            <label><input type="radio" name="q5" value="C"> 7</label><br>
+            <label><input type="radio" name="q5" value="D"> 8</label>
+        </div>
+
+        <button onclick="calculateMarks()">Submit Answers 💖</button>
+        <p id="result" style="font-size:20px; margin-top:20px; font-weight:bold;"></p>
+    </div>
+
+    <!-- Page 3: Memory Game -->
+    <div id="page3" class="page">
+        <h1>Memory Game 💞</h1>
+        <div id="memory-game"></div>
+    </div>
+
+<script>
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+    }
+
+    // ⭐ NEW FIXED MARKING SYSTEM
+    function calculateMarks() {
+        let marks = 0;
+
+        // Correct answers
+        const answers = {
+            q1: "B",  // 2018
+            q2: "Me",
+            q3: "B",  // Kitkat
+            q4: "D",
+            q5: "C"   // 7 years
+        };
+
+        // Check user-selected answers
+        for (let key in answers) {
+            let selected = document.querySelector(`input[name="${key}"]:checked`);
+            if (selected && selected.value === answers[key]) {
+                marks += 20; // Only add marks if correct
+            }
+        }
+
+        document.getElementById('result').innerText =
+            "Your Score: " + marks + " / 100 💘";
+    }
+
+    // Memory Game Logic
+    const emojis = ['❤️','🫂','🫠','🌟','👀','🥀','🌈','🪐'];
+    let tiles = [...emojis, ...emojis];
+    tiles.sort(() => Math.random() - 0.5);
+
+    const game = document.getElementById('memory-game');
+    let firstTile = null;
+    let lock = false;
+
+    tiles.forEach((emoji) => {
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        tile.dataset.emoji = emoji;
+        tile.innerText = '';
+
+        tile.onclick = () => {
+            if (lock || tile.innerText !== '') return;
+            tile.innerText = emoji;
+
+            if (!firstTile) {
+                firstTile = tile;
+            } else {
+                if (firstTile.dataset.emoji === tile.dataset.emoji) {
+                    firstTile = null;
+                } else {
+                    lock = true;
+                    setTimeout(() => {
+                        firstTile.innerText = '';
+                        tile.innerText = '';
+                        firstTile = null;
+                        lock = false;
+                    }, 800);
+                }
+            }
+        };
+
+        game.appendChild(tile);
+    });
+</script>
+
+</body>
+          </html>
